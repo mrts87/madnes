@@ -155,13 +155,16 @@ palette_table_get_color :: proc(
         os.exit(-1)
     }
 
+    //fmt.println(index)
+
     // First colors in a palette are the same between the backdrop and the sprite.
     if (base_address >= SPRITE_PALETTE_VRAM_START && index % 4 == 0) {
         backdrop_address := base_address - 0x0010
-        entry := ppu_vram_read(ppu, mapper, base_address)
+        entry := ppu_vram_read(ppu, mapper, base_address + u16(index))
         return ppu.system_palette.entries[entry]
     }
 
-    entry := ppu_vram_read(ppu, mapper, base_address)
+    entry := ppu_vram_read(ppu, mapper, base_address + u16(index))
+    //fmt.println(entry)
     return ppu.system_palette.entries[entry]
 }

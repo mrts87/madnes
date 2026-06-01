@@ -469,7 +469,6 @@ ppu_render_nametable :: proc(ppu: ^PPU, mapper: ^mappers.NROM) {
             attrib_table_addr,
             nametable_entry,
         )
-        fmt.println(tile_palette)
 
         ppu_render_tile(
             ppu,
