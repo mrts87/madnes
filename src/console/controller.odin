@@ -36,3 +36,14 @@ Standard_Controller :: struct {
 should_poll_input :: proc(input_register: u8) -> bool {
     return (input_register & 0x01) != 0
 }
+
+/// Returns the status of the controller, checking one button per read.
+read_controller :: proc(controller: ^Standard_Controller) -> u8 {
+    // The first 3-5 bits of the value are usually not driven, usually making the base value 0x40
+    controller_output: u8 = 0x40
+
+    // Pin D0: Controller's buttons
+
+
+    return controller_output
+}
