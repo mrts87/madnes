@@ -137,6 +137,15 @@ cpu_mem_read :: proc(cpu: ^CPU, address: u16) -> u8 {
 /// Of the console's components
 @(private)
 cpu_peek_memory :: proc(cpu: ^CPU, address: u16) -> u8 {
+    // Check the controller registers
+    if address == OUTPUT_REGISTER_1 {
+        return read_controller(&cpu.console.controller_1)
+    }
+
+    if address == OUTPUT_REGISTER_2 {
+        return read_controller(&cpu.console.controller_2)
+    }
+
     // Check the cartridge
     cartridge_accessed, cartridge_byte := mappers.nrom_mem_read(
         &cpu.console.mapper,

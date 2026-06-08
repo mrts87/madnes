@@ -8,9 +8,11 @@ import "core:os"
 PPU_WARMUP_CYCLE :: 29658
 
 Console :: struct {
-    cpu:    CPU,
-    ppu:    PPU,
-    mapper: mappers.NROM, // TODO: Implement Mapper interface to support multiple cartridge types
+    cpu:          CPU,
+    ppu:          PPU,
+    mapper:       mappers.NROM, // TODO: Implement Mapper interface to support multiple cartridge types
+    controller_1: Standard_Controller,
+    controller_2: Standard_Controller,
 }
 
 console_new :: proc() -> Console {
@@ -57,6 +59,16 @@ console_tick :: proc(console: ^Console) {
         ppu_tick(&console.ppu, console)
         ppu_tick(&console.ppu, console)
         ppu_tick(&console.ppu, console)
+    }
+
+    // Handle gamepads; update their input status and reset the current button while
+    // the input register is active.
+    if should_poll_input(cpu_peek_memory(&console.cpu, INPUT_REGISTER)) {
+        console.controller_1.input = console.controller_1.input_buffer
+        console.controller_1.current_button = 0
+
+        console.controller_2.input = console.controller_2.input_buffer
+        console.controller_2.current_button = 0
     }
 
     //ppu_tick(&console.ppu, console)

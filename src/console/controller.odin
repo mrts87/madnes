@@ -44,6 +44,18 @@ read_controller :: proc(controller: ^Standard_Controller) -> u8 {
 
     // Pin D0: Controller's buttons
 
+    if (controller.current_button <= u8(Standard_Controller_Button.Right)) {
+        input_button := Standard_Controller_Button(controller.current_button)
+        if input_button in controller.input {
+            controller_output |= 0x01
+        }
+    } else {
+        // All subsequent reads return 1 on the official controllers
+        controller_output |= 0x01
+    }
+
+    controller.current_button += 1
+
 
     return controller_output
 }
